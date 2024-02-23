@@ -28,8 +28,6 @@ class LoginForm(forms.Form):
     def clean_password(self):
         user = self.cleaned_data.get('username')
         pwd_md5 = md5(self.cleaned_data.get('password'))
-        print(pwd_md5)
-        print(md5(('123')))
         if not Admin.objects.filter(username=user, password=pwd_md5).exists():
             raise ValidationError('账号或密码错误')
         return pwd_md5

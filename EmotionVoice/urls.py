@@ -15,11 +15,12 @@ Including another URLconf
 """
 # from django.contrib import admin
 from django.urls import path
-from app_main.views import account, translate, analysis, hots, talking, about
+from app_main.views import account, index, analysis, hots, talking, about
 
 urlpatterns = [
     # 首页
-    path('', translate.show),
+    path('', index.show),
+    path('index', index.show),
 
     # 用户登录、退出
     path('account/login', account.login),

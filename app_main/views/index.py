@@ -3,4 +3,4 @@ from django.shortcuts import render
 
 
 def show(response):
-    return render(response, 'translate.html')
+    return render(response, 'index.html')
