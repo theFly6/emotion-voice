@@ -9,3 +9,8 @@ class Admin(models.Model):
 
     def __str__(self):
         return self.username
+
+
+if not Admin.objects.filter(username='admin').exists():
+    Admin.objects.create(username='admin',
+                         password='ecdc80b866bef369eb57302124b2ff07')
