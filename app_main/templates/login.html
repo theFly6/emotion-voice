@@ -1,0 +1,50 @@
+{% extends 'Layout.html' %}
+{% block css %}
+    <style>
+        .login {
+            width: 500px;
+            height: 420px;
+            border: 2px solid #dddddd;
+            margin: 100px auto auto;
+            padding: 40px;
+            border-radius: 7px;
+            box-shadow: 5px 5px 20px #aaa;
+        }
+
+        .login h1 {
+            text-align: center;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="login">
+        <h1>用户登录</h1>
+        <form method="post" novalidate>
+            {% csrf_token %}
+            <div class="form-group">
+                <label>用户名:</label>
+                {{ form.username }}
+                <span style="color: red">{{ form.username.errors.0 }}</span>
+            </div>
+            <div class="form-group">
+                <label>密码:</label>
+                {{ form.password }}
+                <span style="color: red">{{ form.password.errors.0 }}</span>
+            </div>
+            <div class="form-group">
+                <label for="id_code">图片验证码:</label>
+                <div class="row">
+                    <div class="col-xs-7">
+                        {{ form.code }}
+                        <span style="color: red">{{ form.code.errors.0 }}</span>
+                    </div>
+                    <div class="col-xs-5">
+                        <img src="/account/image/code" alt="Missing" id="img_code">
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">登录</button>
+        </form>
+    </div>
+{% endblock %}

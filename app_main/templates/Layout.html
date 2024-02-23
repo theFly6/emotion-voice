@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    {% block css %}
+    {% endblock %}
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">情感之声</a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="/analyse">情感分析</a></li>
+            </ul>
+            <ul class="nav navbar-nav">
+                <li><a href="/news/list">热点资讯</a></li>
+            </ul>
+            <ul class="nav navbar-nav">
+                <li><a href="/talking/list">讨论投稿</a></li>
+            </ul>
+            <ul class="nav navbar-nav">
+                <li><a href="/about/us">关于我们</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% if not request.session.info.username %}
+                    <li><a href="/account/login">登录</a></li>
+                {% else %}
+                    <li><a href="/account/logout">注销</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false">{{ request.session.info.username }} <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/account/my">我的空间</a></li>
+                            <li><a href="/account/setting">账户设置</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="/account/logout">注销</a></li>
+                        </ul>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div>
+    {% block content %}
+    {% endblock %}
+</div>
+
+
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+{% block js %}
+{% endblock %}
+</body>
+</html>
