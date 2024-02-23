@@ -15,15 +15,27 @@ Including another URLconf
 """
 # from django.contrib import admin
 from django.urls import path
-from app_main.views import account, translate
+from app_main.views import account, translate, analysis, hots, talking, about
 
 urlpatterns = [
+    # 首页
+    path('', translate.show),
 
     # 用户登录、退出
     path('account/login', account.login),
     path('account/logout', account.logout),
     path('account/image/code', account.image_code),
 
-    path('', translate.show),
+    # 情感分析
+    path('analysis', analysis.show),
+
+    # 热点资讯
+    path('hots', hots.show),
+
+    # 讨论投稿
+    path('talking', talking.show),
+
+    # 关于我们
+    path('about', about.show),
 
 ]
