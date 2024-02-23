@@ -54,7 +54,7 @@ def login(request):
         }
         # 登录有限时限30分钟/30分钟自动退出
         request.session.set_expiry(60 * 30)
-        return redirect('/admin/list')
+        return redirect('/')
     return render(request, 'login.html', {'form': form})
 
 
