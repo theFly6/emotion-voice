@@ -1,5 +1,173 @@
 {% extends 'Layout.html' %}
-
+{% block css %}
+    <style>
+        .from-lang,
+        .to-lang {
+            position: relative;
+        }
+    </style>
+{% endblock %}
 {% block content %}
-    这是是情感分析页面
+
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-1">
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"
+                            style="width: 130px;margin-top: 0">
+                        <span class="from-lang">中文（简体）</span>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu from-menu">
+                        <li><a href="#">中文（简体）</a></li>
+                        <li><a href="#">英语</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <svg class="svg-icon" xmlns="http://www.w3.org/2000/svg" style="margin-left: 95px; padding-top: 5px"
+                     width="30"
+                     height="30" viewBox="0 0 1024 1024">
+                    <path fill="currentColor"
+                          d="M847.9 592H152c-4.4 0-8 3.6-8 8v60c0 4.4 3.6 8 8 8h605.2L612.9 851c-4.1 5.2-.4 13 6.3 13h72.5c4.9 0 9.5-2.2 12.6-6.1l168.8-214.1c16.5-21 1.6-51.8-25.2-51.8M872 356H266.8l144.3-183c4.1-5.2.4-13-6.3-13h-72.5c-4.9 0-9.5 2.2-12.6 6.1L150.9 380.2c-16.5 21-1.6 51.8 25.1 51.8h696c4.4 0 8-3.6 8-8v-60c0-4.4-3.6-8-8-8"/>
+                </svg>
+            </div>
+            <div class="col-xs-2">
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"
+                            style="width: 130px">
+                        <span class="to-lang">英语</span>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu to-menu">
+                        <li><a href="#">中文（简体）</a></li>
+                        <li><a href="#">英语</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-xs-1">
+                <button id="trans_now" type="button" class="btn btn-default">立即翻译</button>
+            </div>
+            <div class="col-xs-6">
+                <button type="button" class="btn btn-default">情感分析</button>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 10px">
+            <div class="col-xs-6">
+                <footer>&nbsp;</footer>
+                    <textarea class="form-control input_text" rows="3" placeholder="请输入需要翻译的语句"
+                              style="height: 200px;resize: none"></textarea>
+            </div>
+            <div class="col-xs-6">
+                <footer style="text-align: right">
+                    本网站非商业网站，翻译结果由
+                    <a href="https://fanyi.baidu.com/" target="_blank">百度翻译</a>
+                    提供
+                </footer>
+                <div class="form-control trans_result" style="width: 100%; height: 200px;background-color: #f5f5f5">
+                    <div class="">
+                        翻译结果
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="row">
+            <h4 style="margin-top: 50px; margin-left: 15px;">
+                情感分析结果
+            </h4>
+        </div>
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="form-control" style="width: 100%; height: 200px">
+                    <div class="">
+                        输入语句的情感分析结果
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="form-control" style="width: 100%; height: 200px;background-color: #f5f5f5">
+                    <div class="">
+                        翻译语句的情感分析结果
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+
+        $(document).ready(function () {
+            BindExcLanguage()
+        });
+
+        $(function () {
+            BindFromLanguage()
+            BindToLanguage()
+            BindTransLanguage()
+        })
+
+        function BindFromLanguage() {
+            $('.from-menu li a').click(function () {
+                $('.from-lang').text($(this).text());
+            })
+        }
+
+        function BindToLanguage() {
+            $('.to-menu li a').click(function () {
+                $('.to-lang').text($(this).text());
+            })
+        }
+
+        function BindExcLanguage() {
+            $('.svg-icon').hover(
+                function () {
+                    // 鼠标悬停时将鼠标指针的形状设置为手指形状
+                    $(this).css('cursor', 'pointer');
+                },
+                function () {
+                    // 鼠标移开时将鼠标指针的形状设置为默认形状
+                    $(this).css('cursor', 'default');
+                }
+            );
+
+            $('.svg-icon').click(function () {
+                let fromLang = $('.from-lang').text();
+                let toLang = $('.to-lang').text();
+
+                // 执行双向移动动画效果
+                $('.from-lang').animate({left: '250px'}, 500);
+                $('.to-lang').animate({left: '-250px'}, 500);
+                $('.from-lang').animate({left: '0px'}, 10);
+                $('.to-lang').animate({left: '0px'}, 10);
+
+                // 交换文本内容
+                $('.from-lang').text(toLang);
+                $('.to-lang').text(fromLang);
+            });
+        }
+
+        function BindTransLanguage() {
+            $('#trans_now').click(function () {
+                $.ajax({
+                    url: '/analysis/gettrans',
+                    type: 'get',
+                    data: {
+                        from_lang: $('.from-lang').text(),
+                        to_lang: $('.to-lang').text(),
+                        word: $('.input_text').val(),
+                    },
+                    dataType: 'JSON',
+                    success: function (res) {
+                        if (res.status) {
+                            $('.trans_result').text(res.trans_result)
+                        }
+                    }
+                })
+            })
+        }
+    </script>
 {% endblock %}
