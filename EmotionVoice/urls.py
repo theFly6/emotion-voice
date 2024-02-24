@@ -30,6 +30,7 @@ urlpatterns = [
     # 情感分析
     path('analysis', analysis.show),
     path('analysis/gettrans', analysis.get_trans_result),
+    path('analysis/line', analysis.line_data),
 
     # 热点资讯
     path('hots', hots.show),

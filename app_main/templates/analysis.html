@@ -49,14 +49,14 @@
                 <button id="trans_now" type="button" class="btn btn-default">立即翻译</button>
             </div>
             <div class="col-xs-6">
-                <button type="button" class="btn btn-default">情感分析</button>
+                <button id="draw_now" type="button" class="btn btn-default">情感分析</button>
             </div>
         </div>
         <div class="row" style="margin-top: 10px">
             <div class="col-xs-6">
                 <footer>&nbsp;</footer>
-                    <textarea class="form-control input_text" rows="3" placeholder="请输入需要翻译的语句"
-                              style="height: 200px;resize: none;font-size: 20px"></textarea>
+                <textarea class="form-control input_text" rows="3" placeholder="请输入需要翻译的语句"
+                          style="height: 200px;resize: none;font-size: 20px"></textarea>
             </div>
             <div class="col-xs-6">
                 <footer style="text-align: right">
@@ -64,7 +64,8 @@
                     <a href="https://fanyi.baidu.com/" target="_blank">百度翻译</a>
                     提供
                 </footer>
-                <div class="form-control trans_result" style="width: 100%; height: 200px;background-color: #f5f5f5;font-size: 20px">
+                <div class="form-control trans_result"
+                     style="width: 100%; height: 200px;background-color: #f5f5f5;font-size: 20px">
                     <div class="">
                         翻译结果
                     </div>
@@ -73,31 +74,19 @@
 
 
         </div>
-        <div class="row">
-            <h4 style="margin-top: 50px; margin-left: 15px;font-size: 25px">
-                情感分析结果
-            </h4>
-        </div>
-        <div class="row">
-            <div class="col-xs-6">
-                <div class="form-control" style="width: 100%; height: 200px;font-size: 20px">
-                    <div class="">
-                        输入语句的情感分析结果
-                    </div>
-                </div>
+        <div class="panel panel-default" style="margin-top: 30px;">
+            <div class="panel-heading">
+                <h4 style="margin: 0">情感分析结果</h4>
             </div>
-            <div class="col-xs-6">
-                <div class="form-control" style="font-size: 20px;width: 100%; height: 200px;background-color: #f5f5f5">
-                    <div class="">
-                        翻译语句的情感分析结果
-                    </div>
-                </div>
+            <div class="panel-body">
+                <div id="m1" style="width: 100%;height:320px;"></div>
             </div>
         </div>
     </div>
 {% endblock %}
 
 {% block js %}
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <script>
 
         $(document).ready(function () {
@@ -108,6 +97,9 @@
             BindFromLanguage()
             BindToLanguage()
             BindTransLanguage()
+            {# 折线图 #}
+            initLine()
+            BindDrawLine()
         })
 
         function BindFromLanguage() {
@@ -168,6 +160,92 @@
                     }
                 })
             })
+        }
+
+        // 基于准备好的dom，初始化echarts实例
+        let myChart = echarts.init(document.getElementById('m1'));
+        let option = undefined;
+        function initLine() {
+            option = {
+                title: {
+                    text: '情感倾向变化趋势折线图',
+                    textAlign: "auto",
+                    left: "center",
+                    subtext: getTime()
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    {#data: ['英文情感分值变化', '中文情感分值变化'],#}
+                    bottom: 0
+                },
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: ['疫情前', '疫情间', '疫情后']
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [
+                    {
+                        name: '中文情感分值变化',
+                        type: 'line',
+                        stack: 'Total',
+                        data: [-5, 0, 2]
+                    },
+                    {
+                        name: '英文情感分值变化',
+                        type: 'line',
+                        stack: 'Total',
+                        data: [1, 2, 3]
+                    },
+                ]
+            }
+        }
+
+        function BindDrawLine() {
+            $('#draw_now').click(function () {
+                    $.ajax({
+                        url: '/analysis/line',
+                        type: 'GET',
+                        data: {
+                            from_word: $('.input_text').val(),
+                            to_word: $('.trans_result').text(),
+                        },
+                        datatype: 'JSON',
+                        success: function (res) {
+                            if (res.status) {
+                                option.legend.data = res.data
+                                option.title.subtext = getTime()
+                                option.series = res.series
+                                // 使用刚指定的配置项和数据显示图表。
+                                console.log(option)
+                                myChart.setOption(option);
+                            }
+                        }
+                    })
+                }
+            )
+        }
+        function getTime() {
+            // 获取当前时间
+            var currentTime = new Date();
+
+            // 创建一个字符串，包含年、月、日、小时、分钟和秒
+            var timeString = currentTime.getFullYear() + '-' +
+                (currentTime.getMonth() + 1) + '-' +
+                currentTime.getDate() + ' ' +
+                currentTime.getHours() + ':' +
+                currentTime.getMinutes() + ':' +
+                currentTime.getSeconds();
+            return timeString
         }
     </script>
 {% endblock %}
