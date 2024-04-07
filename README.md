@@ -1,63 +1,32 @@
-## 1. 项目的拉取
+# 1. 项目说明
 
-- 使用pycharm打开一个空文件夹
-- 选择VCS的第二个
-
-<img src=".\md_pic\image-20240223121544588.png" alt="image-20240223121544588" style="zoom:80%;" />
-
-- 点击ok
-
-![image-20240223121622708](.\md_pic\image-20240223121622708.png)
-
-- 选择clone项目
-
-![image-20240223121622708](.\md_pic\image-20240223121741230.png)
-
-- 输入项目url
-
-![image-20240223121622708](.\md_pic\image-20240223121914774.png)
+​	本项目为SRTP项目《后疫情时代中美青少年网络用语分》的在线情感可视化网站，核心功能为中英文词语情感可视化展示。
 
 
 
-
-
-## 2. 项目文件的上传
-
-- 先commit
-![](.\md_pic\image-20240223123737858.png)
-![image-20240223123934790](.\md_pic\image-20240223123934790.png)
-
-- 最后push
-![image-20240223124218470](.\md_pic\image-20240223124218470.png)
+​	项目主要基于Django框架搭建，通过Mysql进行数据存储。
 
 
 
-## 3. 项目打开方式
+# 2. 使用说明
 
-- 打开项目config选择django并进行如下端口号以及解释器设置
+- 首先安装所需依赖库：django，pillow，js2py，django，mysqlclient，urlilb3，fake_useragent等库。
+- 然后再修改setting中的mysql数据库配置连接到一个新的用于存放账号信息的一个数据库上。
 
-![image-20240223124619329](.\md_pic\image-20240223124619329.png)
+- 最后按照正常的Django项目启动流程即可正常运行：
+  - `python manage.py makemigrations`
+  - `python manage.py migrate`
+  - `python manage.py migrate`（第二次执行效果为向绑定的数据库插入管理员账号：用户名Admin、密码123）
+  - `python manage.py runserver 8080`
 
-- 再进行数据库相关设置
 
-![image-20240223124959318](.\md_pic\image-20240223124959318.png)
 
-- 确保你的数据库为mysql并填入你的数据库的名称以及相应的账号密码
+# 3. 效果展示
 
-## 4. 运行django
+**登陆页面**
 
-![image-20240223125541552](.\md_pic\image-20240223125541552.png)
+![](.\md_pic\登陆效果图.png)
 
-- 依次执行下列两个指令
+**核心功能（中英文情感倾可视化向对比分析）页面**
 
-![image-20240223130051890](.\md_pic\image-20240223130051890.png)
-
-- 点击运行后点击生成的连接即可运行
-
-![image-20240223130217059](.\md_pic\image-20240223130217059.png)
-
-![image-20240223130303013](.\md_pic\image-20240223130303013.png)
-
-- 输入账号admin密码123以及验证码即可完整登录
-
-![image-20240223130413280](.\md_pic\image-20240223130413280.png)
+![](.\md_pic\核心功能示例.png)

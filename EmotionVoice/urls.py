@@ -19,7 +19,7 @@ from app_main.views import account, index, analysis, hots, talking, about
 
 urlpatterns = [
     # 首页
-    path('', index.show),
+    path('', analysis.show),
     path('index', index.show),
 
     # 用户登录、退出
